@@ -12,13 +12,14 @@ services:
     volumes:
       - postgres_data:/bitnami/postgresql
 
-  app:
-    image: 'oven/bun'
-    entrypoint: []
-    command: "/bin/sh -c 'bun install && bun run --watch src/server.ts'"
-    # expose the right ports
-    ports: ['3333:3333']
-    volumes: ['./:/home/bun/app']
+  # app:
+  #   image: 'oven/bun'
+  #   entrypoint: []
+  #   command: "/bin/sh -c 'sleep 10 && bun install && bun dev'"
+  #   ports: ['3333:3333']
+  #   volumes: ['./:/home/bun/app']
+  #   depends_on:
+  #     - postgres
 
 volumes:
   postgres_data:
