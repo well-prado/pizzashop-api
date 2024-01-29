@@ -12,7 +12,7 @@ COPY tsconfig.json .
 # COPY public public
 
 ENV NODE_ENV production
-CMD ["sh", "-c", "bun src/migrate.ts && bun src/server.ts"]
+CMD ["sh", "-c", "bun src/db/migrate.ts && bun src/server.ts"]
 # CMD ["bun", "src/server.ts"]
 
 EXPOSE 3333
