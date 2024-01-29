@@ -25,15 +25,15 @@
     "postgres": "3.4.3",
     "react": "^18.2.0",
     "resend": "^2.0.0",
-    "chalk": "5.3.0",
-    "@faker-js/faker": "8.3.1",
     "zod": "3.22.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "8.3.1",
     "@rocketseat/eslint-config": "2.1.0",
     "@types/pg": "8.10.9",
     "@types/react": "^18.2.39",
     "bun-types": "^1.0.14",
+    "chalk": "5.3.0",
     "drizzle-kit": "0.20.6",
     "eslint": "8.54.0",
     "eslint-plugin-drizzle": "^0.2.1",
