@@ -3,7 +3,7 @@ import { env } from '@/env'
 
 export default {
   schema: './src/db/schema/index.ts',
-  out: './src/db/migrations',
+  out: './drizzle',
   driver: 'pg',
   dbCredentials: {
     connectionString: env.DB_URL,
