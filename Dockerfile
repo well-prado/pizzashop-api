@@ -5,9 +5,9 @@ WORKDIR /app
 COPY package.json .
 COPY bun.lockb .
 
-RUN bun install --production
-RUN bun migrate
-RUN bun seed
+RUN bun install --production && \
+    bun migrate && \
+    bun seed &&
 
 COPY src src
 COPY tsconfig.json .
