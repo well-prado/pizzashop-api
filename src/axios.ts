@@ -10,7 +10,8 @@ function createApi() {
         ...options.headers,
         'Content-Type': 'application/json',
         'Deskree-Admin': env.DESKREE_ADMIN_TOKEN,
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://www.globaldesk.com.br',
+        'Access-Control-Allow-Credentials': 'true',
       },
     })
 
