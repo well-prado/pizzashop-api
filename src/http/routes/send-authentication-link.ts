@@ -1,7 +1,4 @@
 import Elysia, { t } from 'elysia'
-// import { db } from '@/db/connection'
-// import { authLinks } from '@/db/schema'
-// import { createId } from '@paralleldrive/cuid2'
 import { resend } from '@/mail/client'
 import { AuthenticationMagicLinkTemplate } from '@/mail/templates/authentication-magic-link'
 import { env } from '@/env'
@@ -20,24 +17,11 @@ export const sendAuthenticationLink = new Elysia().post(
   async ({ body }) => {
     const { email, uid } = body
 
-    // const userFromEmail = await db.query.users.findFirst({
-    //   where(fields, { eq }) {
-    //     return eq(fields.email, email)
-    //   },
-    // })
-
-    const userFromEmail = await api.get<AuthLink>(`/auth_links/${uid}`)
+    const userFromEmail: any = await api.get(`/auth_links/${uid}`)
 
     if (!userFromEmail) {
       throw new UnauthorizedError()
     }
-
-    // const authLinkCode = createId()
-
-    // await db.insert(authLinks).values({
-    //   userId: userFromEmail.data.uid,
-    //   code: userFromEmail.data.code,
-    // })
 
     const authLink = new URL('/auth-links/authenticate', env.API_BASE_URL)
     authLink.searchParams.set('code', userFromEmail.data.code)

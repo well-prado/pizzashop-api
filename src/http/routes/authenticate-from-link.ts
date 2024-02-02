@@ -1,25 +1,16 @@
+// authenticateFromLink.js
 import Elysia, { t } from 'elysia'
 import dayjs from 'dayjs'
 import { authentication } from '../authentication'
-// import { db } from '@/db/connection'
-// import { authLinks } from '@/db/schema'
-// import { eq } from 'drizzle-orm'
 import { UnauthorizedError } from './errors/unauthorized-error'
-import { api } from '@/axios'
-import { AuthLink } from './send-authentication-link'
+import { api } from '@/axios' // Updated import
 
 export const authenticateFromLink = new Elysia().use(authentication).get(
   '/auth-links/authenticate',
   async ({ signUser, query, set }) => {
     const { code, redirect } = query
 
-    // const authLinkFromCode = await db.query.authLinks.findFirst({
-    //   where(fields, { eq }) {
-    //     return eq(fields.code, code)
-    //   },
-    // })
-
-    const authLinkFromCode = await api.get<AuthLink>('/auth_links', {
+    const authLinkFromCodeResponse: any = await api.get('/auth_links', {
       params: {
         where: [
           {
@@ -31,41 +22,41 @@ export const authenticateFromLink = new Elysia().use(authentication).get(
       },
     })
 
-    if (!authLinkFromCode) {
+    console.log(authLinkFromCodeResponse.data)
+
+    console.log(authLinkFromCodeResponse.data[0].attributes)
+
+    if (!authLinkFromCodeResponse) {
       throw new UnauthorizedError()
     }
 
-    if (dayjs().diff(authLinkFromCode.data.createdAt, 'hour') > 1) {
+    const authLinkFromCode = authLinkFromCodeResponse.data[0]
+
+    if (dayjs().diff(authLinkFromCode.attributes.createdAt, 'hour') > 1) {
       throw new UnauthorizedError()
     }
 
-    // const managedRestaurant = await db.query.restaurants.findFirst({
-    //   where(fields, { eq }) {
-    //     return eq(fields.managerId, authLinkFromCode.data.user_id)
-    //   },
-    // })
-
-    const managedRestaurant = await api.get('/restaurants', {
+    const managedRestaurantResponse: any = await api.get('/restaurants', {
       params: {
         where: [
           {
             attribute: 'manager_id',
             operator: '=',
-            value: authLinkFromCode.data.user_id,
+            value: authLinkFromCode.attributes.user_id,
           },
         ],
       },
     })
 
+    const managedRestaurant = managedRestaurantResponse.data[0]
+
     await signUser({
-      sub: authLinkFromCode.data.user_id,
-      restaurantId: managedRestaurant?.data.uid,
+      sub: authLinkFromCode.attributes.user_id,
+      restaurantId: managedRestaurant?.uid,
     })
 
-    // await db.delete(authLinks).where(eq(authLinks.code, code))
-
     // eslint-disable-next-line drizzle/enforce-delete-with-where
-    await api.delete(`/auth_links/${authLinkFromCode.data.uid}`)
+    await api.delete(`/auth_links/${authLinkFromCode.uid}`)
 
     set.redirect = redirect
   },
