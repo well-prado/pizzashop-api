@@ -1,12 +1,3 @@
-// import axios from 'axios'
-// import { env } from './env'
-
-// export const api = axios.create({
-//   baseURL: env.DESKREE_API_URL,
-//   withCredentials: true,
-// })
-
-// api.ts
 import { env } from './env'
 
 function createApi() {
@@ -15,7 +6,6 @@ function createApi() {
   async function request(endpoint: any, options?: any) {
     const response = await fetch(`${baseURL}${endpoint}`, {
       ...options,
-      credentials: 'include', // Equivalent to Axios' withCredentials
       headers: {
         ...options.headers,
         'Content-Type': 'application/json',
